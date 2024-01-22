@@ -1,0 +1,324 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Client {
+  id                     Int           @id @default(autoincrement())
+  corporate_name         String
+  trade_name             String?
+  cgc                    String        @db.VarChar(14)
+  cep                    String?       @db.Char(8)
+  address                String?
+  number                 Int?
+  complement             String?
+  district               String?
+  city                   String?
+  uf                     String?       @db.VarChar(2)
+  country                String?       @db.VarChar(20)
+  email                  String?       @db.VarChar(50)
+  site                   String?       @db.VarChar(50)
+  fone                   Int?
+  head                   String?
+  municipal_registration String?
+  observation            String?       @db.MediumText
+  ramal                  Int?
+  state_registration     String?
+  status                 String        @default("A") @db.Char(1)
+  created_at             DateTime      @default(now())
+  updated_at             DateTime      @updatedAt
+  Contract               Contract[]
+  Timesheet              Timesheet[]
+  department             Department[]
+  Ticket                 Ticket[]
+  UserClients            UserClients[]
+
+  @@map("clients")
+}
+
+model Department {
+  id         Int      @id @default(autoincrement())
+  name       String   @db.VarChar(50)
+  client     Client   @relation(fields: [client_id], references: [id])
+  client_id  Int
+  manager_id Int?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  status     String?  @default("A") @db.Char(1)
+  User       User[]
+  Ticket     Ticket[]
+
+  @@map("departments")
+}
+
+model User {
+  id                Int               @id @default(autoincrement())
+  email             String            @unique
+  name              String
+  password          String
+  profile           String            @default("U") @db.Char(1)
+  department        Department?       @relation(fields: [department_id], references: [id])
+  department_id     Int?
+  fone              Int?
+  extension         Int?
+  mobile            Decimal?
+  whatsapp          Boolean           @default(false)
+  observation       String?           @db.MediumText
+  admin_system      Boolean           @default(false)
+  remote_connection String?
+  status            String            @default("A") @db.Char(1)
+  created_at        DateTime          @default(now())
+  updated_at        DateTime?         @updatedAt
+  updated_password  DateTime?
+  deleted_at        DateTime?
+  activated         Boolean           @default(false)
+  Token             Token[]
+  Ticket_User       Ticket[]          @relation("user")
+  Ticket_Agent      Ticket[]          @relation("agent")
+  Ticket            Ticket[]          @relation("approver")
+  TicketContent     TicketContent[]
+  Notification      Notification[]
+  UserRoles         UserRoles[]
+  UserClients       UserClients[]
+  UserPermissions   UserPermissions[]
+  Timesheet         Timesheet[]
+
+  @@map("users")
+}
+
+model Token {
+  id                        Int       @id @default(autoincrement())
+  user_id                   Int
+  tokenActivate             String    @unique @db.VarChar(50)
+  tokenActivateExpires      DateTime
+  tokenPasswordReset        String?   @unique @db.VarChar(50)
+  tokenPasswordResetExpires DateTime?
+  user                      User      @relation(fields: [user_id], references: [id])
+
+  @@map("tokens")
+}
+
+model Contract {
+  id            Int       @id @default(autoincrement())
+  client_id     Int
+  initial_date  DateTime
+  final_date    DateTime?
+  type          String    @db.Char(1)
+  limit         Int?
+  package_value Decimal?  @db.Decimal(10, 2)
+  price         Decimal   @db.Decimal(10, 2)
+  observation   String?
+  status        String?   @default("A") @db.Char(1)
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+  client        Client    @relation(fields: [client_id], references: [id])
+
+  @@map("contracts")
+}
+
+model Timesheet {
+  id         Int      @id @default(autoincrement())
+  client_id  Int
+  date       DateTime @db.Date
+  start_time String?
+  end_time   String?
+  interval   Int?     @default(0)
+  activities String?  @db.LongText
+  ticket     Ticket?  @relation(fields: [ticket_id], references: [id])
+  ticket_id  Int?
+  user       User?    @relation(fields: [user_id], references: [id])
+  user_id    Int?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  client     Client   @relation(fields: [client_id], references: [id])
+
+  @@map("timesheet")
+}
+
+model Situation {
+  id         Int      @id @default(autoincrement())
+  name       String   @db.VarChar(50)
+  status     String?  @default("A") @db.Char(1)
+  colors     String?
+  order      Int?
+  type       String   @default("A") @db.Char(1)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  Ticket     Ticket[]
+
+  @@map("situations")
+}
+
+model Priority {
+  id         Int      @id @default(autoincrement())
+  name       String   @db.VarChar(50)
+  status     String   @default("A") @db.Char(1)
+  colors     String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  Ticket     Ticket[]
+
+  @@map("priorities")
+}
+
+model Category {
+  id         Int      @id @default(autoincrement())
+  name       String   @db.VarChar(50)
+  status     String   @default("A") @db.Char(1)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  Ticket     Ticket[]
+
+  @@map("categories")
+}
+
+model Ticket {
+  id            Int             @id @default(autoincrement())
+  user          User            @relation("user", fields: [user_id], references: [id])
+  user_id       Int
+  client        Client?         @relation(fields: [client_id], references: [id])
+  client_id     Int?
+  department    Department?     @relation(fields: [department_id], references: [id])
+  department_id Int?
+  subject       String          @db.VarChar(50)
+  category      Category        @relation(fields: [category_id], references: [id])
+  category_id   Int
+  priority      Priority        @relation(fields: [priority_id], references: [id])
+  priority_id   Int
+  situation     Situation       @relation(fields: [situation_id], references: [id])
+  situation_id  Int             @default(1)
+  approver      User?           @relation("approver", fields: [approver_id], references: [id])
+  approver_id   Int?
+  agent         User?           @relation("agent", fields: [agent_id], references: [id])
+  agent_id      Int?
+  deadline      DateTime?       @db.Date
+  updated_at    DateTime        @updatedAt
+  created_at    DateTime        @default(now())
+  Timesheet     Timesheet[]
+  TicketContent TicketContent[]
+  Notification  Notification[]
+
+  @@map("tickets")
+}
+
+model TicketContent {
+  id                Int                 @id @default(autoincrement())
+  content           String              @db.LongText
+  ticket            Ticket              @relation(fields: [ticket_id], references: [id])
+  ticket_id         Int
+  user              User                @relation(fields: [user_id], references: [id])
+  user_id           Int
+  type              String              @default("R") @db.Char(1)
+  updated_at        DateTime            @updatedAt
+  created_at        DateTime            @default(now())
+  TicketContentFile TicketContentFile[]
+
+  @@map("ticket_content")
+}
+
+model TicketContentFile {
+  id                Int            @id @default(autoincrement())
+  filename          String
+  size              Int
+  key               String
+  path              String
+  originalname      String
+  ticketContent     TicketContent? @relation(fields: [ticket_content_id], references: [id])
+  ticket_content_id Int?
+  created_at        DateTime       @default(now())
+  updated_at        DateTime       @updatedAt
+
+  @@map("ticket_content_file")
+}
+
+model Notification {
+  id         Int      @id @default(autoincrement())
+  title      String
+  message    String
+  type       String
+  user       User     @relation(fields: [user_id], references: [id])
+  user_id    Int
+  ticket     Ticket   @relation(fields: [ticket_id], references: [id])
+  ticket_id  Int
+  read       Boolean  @default(false)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("notifications")
+}
+
+model Role {
+  id              Int               @id @default(autoincrement())
+  name            String
+  description     String
+  created_at      DateTime          @default(now())
+  updated_at      DateTime          @updatedAt
+  RolePermissions RolePermissions[]
+  UserRoles       UserRoles[]
+
+  @@map("roles")
+}
+
+model Permission {
+  id              Int               @id @default(autoincrement())
+  name            String
+  description     String
+  created_at      DateTime          @default(now())
+  updated_at      DateTime          @updatedAt
+  RolePermissions RolePermissions[]
+  UserPermissions UserPermissions[]
+
+  @@map("permissions")
+}
+
+model RolePermissions {
+  id            Int        @id @default(autoincrement())
+  role          Role       @relation(fields: [role_id], references: [id])
+  role_id       Int
+  permission    Permission @relation(fields: [permission_id], references: [id])
+  permission_id Int
+  created_at    DateTime   @default(now())
+  updated_at    DateTime   @updatedAt
+
+  @@map("role_permissions")
+}
+
+model UserRoles {
+  id         Int      @id @default(autoincrement())
+  user       User     @relation(fields: [user_id], references: [id])
+  user_id    Int
+  role       Role     @relation(fields: [role_id], references: [id])
+  role_id    Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("user_roles")
+}
+
+model UserClients {
+  id         Int      @id @default(autoincrement())
+  user       User     @relation(fields: [user_id], references: [id])
+  user_id    Int
+  client     Client   @relation(fields: [client_id], references: [id])
+  client_id  Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("user_clients")
+}
+
+model UserPermissions {
+  id            Int        @id @default(autoincrement())
+  user          User       @relation(fields: [user_id], references: [id])
+  user_id       Int
+  permission    Permission @relation(fields: [permission_id], references: [id])
+  permission_id Int
+  created_at    DateTime   @default(now())
+  updated_at    DateTime   @updatedAt
+
+  @@map("user_permissions")
+}
