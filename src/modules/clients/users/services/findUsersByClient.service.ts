@@ -55,4 +55,33 @@ export class FindUsersByClientService {
       console.log(error);
     }
   }
+
+  async findUsersByClients(client_id: number) {
+    try {
+      const users = await this.prisma.userClients.findMany({
+        where: { client_id },
+        select: {
+          id: true,
+          user: {
+            select: {
+              name: true,
+              email: true,
+              fone: true,
+              profile: true,
+              department: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      return users;
+    } catch (error) {
+      console.log(error);
+      throw new error('Error');
+    }
+  }
 }

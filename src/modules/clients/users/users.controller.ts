@@ -16,4 +16,9 @@ export class UsersController {
   async findAll() {
     return this.findUsersByClientService.findMany();
   }
+
+  @Get(':client_id/users-by-client')
+  async findUsersByClient(@Param('client_id', ParseIntPipe) client_id: number) {
+    return this.findUsersByClientService.findUsersByClients(client_id);
+  }
 }
