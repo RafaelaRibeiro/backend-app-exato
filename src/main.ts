@@ -39,6 +39,7 @@ async function bootstrap() {
       'http://localhost:56201',
       'http://192.168.15.93:4000',
       'https://portal-production-982a.up.railway.app',
+      'https://painel-production-6187.up.railway.app/',
     ], // Substitua pelo endereço do seu frontend, se diferente
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: 'Authorization, Content-Type, Accept',
