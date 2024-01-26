@@ -26,7 +26,7 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-  const PORT = 5555;
+  const PORT = 3333;
 
   const FRONTEND_URL =
     process.env.NODE_ENV === 'production'
