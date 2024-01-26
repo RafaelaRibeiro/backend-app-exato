@@ -26,7 +26,7 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-  const PORT = 3333;
+  const PORT = process.env.PORT || 3000;
 
   const FRONTEND_URL =
     process.env.NODE_ENV === 'production'
@@ -38,6 +38,7 @@ async function bootstrap() {
       FRONTEND_URL,
       'http://localhost:56201',
       'http://192.168.15.93:4000',
+      'https://portal-production-982a.up.railway.app',
     ], // Substitua pelo endereço do seu frontend, se diferente
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: 'Authorization, Content-Type, Accept',

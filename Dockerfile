@@ -14,6 +14,7 @@ RUN npm install
 COPY . .
 
 # Creates a "dist" folder with the production build
+RUN npx prisma generate
 RUN npm run build
 
 # Expose the port on which the app will run
