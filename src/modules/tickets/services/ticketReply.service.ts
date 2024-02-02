@@ -19,16 +19,25 @@ export class TicketReplyService {
         data: { ...data, ticket_id },
       });
 
-      console.log(ticket);
+      console.log(reply);
 
-      await this.mailerService.sendEmail(
-        ticket.user.email,
-        ticket.id,
-        ticket.subject,
-        ticket.agent.name,
-        ticket.user.name,
-        reply.content,
-      );
+      const user = await this.prisma.user.findUnique({
+        where: { id: reply.user_id },
+        select: {
+          profile: true,
+        },
+      });
+
+      if (user.profile === 'A') {
+        await this.mailerService.sendEmail(
+          ticket.user.email,
+          ticket.id,
+          ticket.subject,
+          ticket.agent.name,
+          ticket.user.name,
+          reply.content,
+        );
+      }
 
       return reply;
     } catch (error) {

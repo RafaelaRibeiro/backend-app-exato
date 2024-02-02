@@ -26,6 +26,8 @@ export class StorageService implements MulterOptionsFactory {
     }),
   };
 
+  private bucketName = process.env.AWS_BUCKET;
+
   private readonly storageTypes = {
     local: diskStorage({
       destination: path.resolve(__dirname, '..', '..', '..', '..', 'tmp'),
@@ -41,9 +43,7 @@ export class StorageService implements MulterOptionsFactory {
 
     s3: multerS3({
       s3: new S3Client(this.config),
-      bucket: (req, file, cb) => {
-        cb(null, process.env.AWS_BUCKET);
-      },
+      bucket: this.bucketName,
       acl: 'public-read',
       key: (req, file, cb) => {
         this.getS3Filename(req, file, (err, key) => {
