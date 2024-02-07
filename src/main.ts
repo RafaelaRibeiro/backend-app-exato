@@ -28,14 +28,10 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
   const PORT = process.env.PORT || 3000;
 
-  const FRONTEND_URL =
-    process.env.NODE_ENV === 'production'
-      ? process.env.FRONTEND_URL_PROD
-      : process.env.FRONTEND_URL_DEV;
-
   app.enableCors({
     origin: [
-      FRONTEND_URL,
+      process.env.FRONTEND_URL_DEV_PORTAL,
+      process.env.FRONTEND_URL_DEV_PAINEL,
       'https://portal-production-982a.up.railway.app',
       'https://painel-production-6187.up.railway.app',
       'https://painel.exatoinovacoes.com.br',

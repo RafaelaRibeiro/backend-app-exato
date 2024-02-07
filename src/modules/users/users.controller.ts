@@ -5,14 +5,16 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Put,
   Request,
   UseGuards,
 } from '@nestjs/common';
 import { CreateUserService } from './services/createUserService.service';
-import { CreateUserDTO } from './users.dto';
+import { CreateUserDTO, UpdateUserDTO } from './users.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { FindUsersService } from './services/findUsers.service';
 import { AuthGuard } from '@nestjs/passport';
+import { UpdateUsersService } from './services/updateuser.service';
 
 interface AuthenticatedRequest extends Request {
   user: {
@@ -27,6 +29,7 @@ export class UsersController {
   constructor(
     private readonly createUserService: CreateUserService,
     private readonly findUserService: FindUsersService,
+    private readonly updateUserService: UpdateUsersService,
   ) {}
 
   @Post()
@@ -46,5 +49,32 @@ export class UsersController {
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
     return this.findUserService.findOne(id);
+  }
+
+  @Put(':id')
+  async updateUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() data: UpdateUserDTO,
+  ) {
+    return this.updateUserService.updateUser(id, data);
+  }
+
+  @Put(':id/change-password')
+  async updatePassword(
+    @Param('id', ParseIntPipe) id: number,
+    @Body()
+    passwordData: {
+      password: string;
+      newPassword: string;
+      confirmPassword: string;
+    },
+  ) {
+    const { password, newPassword, confirmPassword } = passwordData;
+    return this.updateUserService.updatePassword(
+      id,
+      password,
+      newPassword,
+      confirmPassword,
+    );
   }
 }

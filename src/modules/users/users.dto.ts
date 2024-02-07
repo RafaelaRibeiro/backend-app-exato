@@ -7,6 +7,7 @@ import {
   IsEmail,
   IsInt,
   IsOptional,
+  IsBoolean,
 } from 'class-validator';
 
 export class CreateUserDTO {
@@ -23,6 +24,10 @@ export class CreateUserDTO {
   @MinLength(4)
   password: string;
 
+  @IsString()
+  @MinLength(4)
+  confirmPassword: string;
+
   @IsInt()
   @IsOptional()
   department_id?: number;
@@ -35,6 +40,30 @@ export class CreateUserDTO {
   @IsNotEmpty()
   @MaxLength(1)
   profile: string;
+
+  @IsInt()
+  @IsOptional()
+  fone?: number;
+
+  @IsInt()
+  @IsOptional()
+  extension?: number;
+
+  @IsInt()
+  @IsOptional()
+  mobile?: number;
+
+  @IsBoolean()
+  @IsOptional()
+  whatsapp?: boolean;
+
+  @IsString()
+  @IsOptional()
+  observation: string;
+
+  @IsString()
+  @IsOptional()
+  remote_connection: string;
 }
 
 export class UpdateUserDTO extends PartialType(CreateUserDTO) {}

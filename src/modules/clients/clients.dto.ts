@@ -5,7 +5,6 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
-  Length,
   MaxLength,
   MinLength,
 } from 'class-validator';
@@ -37,12 +36,6 @@ export class CreateClientDTO {
   @ApiProperty()
   @IsOptional()
   state_registration?: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @Length(1)
-  @ApiProperty()
-  status: string;
 }
 
 export class UpdateClientDTO {

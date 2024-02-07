@@ -23,7 +23,7 @@ export class TicketDeletionService {
     const existingTicketIds = existingTickets.map((ticket) => ticket.id);
 
     await this.prisma.ticket.deleteMany({
-      where: { id: { in: existingTicketIds } },
+      where: { id: { in: existingTicketIds }, situation_id: 1 },
     });
 
     return 'Ticket delete with success!';

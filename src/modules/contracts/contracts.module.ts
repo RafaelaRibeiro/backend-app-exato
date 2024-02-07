@@ -10,4 +10,4 @@ import { FindContractsService } from './services/findContracts.service';
   providers: [CreateContractService, FindContractsService],
   imports: [PrismaModule],
 })
-export class ContractModule {}
+export class ContractsModule {}

@@ -12,10 +12,10 @@ export class UsersController {
     return this.findUsersByClientService.findClientsByUser(userId);
   }
 
-  @Get('clients')
-  async findAll() {
-    return this.findUsersByClientService.findMany();
-  }
+  // @Get('clients')
+  // async findAll() {
+  //   return this.findUsersByClientService.findMany();
+  // }
 
   @Get(':client_id/users-by-client')
   async findUsersByClient(@Param('client_id', ParseIntPipe) client_id: number) {

@@ -19,7 +19,7 @@ import {
 import { FindContractsService } from './services/findContracts.service';
 
 @ApiTags('contracts')
-@Controller('clients/:client_id/contracts')
+@Controller('contracts')
 export class ContractController {
   constructor(
     private readonly createContractService: CreateContractService,
@@ -43,13 +43,8 @@ export class ContractController {
   }
 
   @Get()
-  @ApiParam({
-    name: 'client_id',
-    type: Number,
-    description: 'ID of the client',
-  })
   @ApiOperation({ summary: 'Find contracts for a client' })
-  async findAll(@Param('client_id', ParseIntPipe) client_id: number) {
-    return this.findContractsService.findAll(client_id);
+  async findAll() {
+    return this.findContractsService.findAll();
   }
 }

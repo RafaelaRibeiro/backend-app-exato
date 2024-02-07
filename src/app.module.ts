@@ -4,7 +4,6 @@ import { AppService } from './app.service';
 import { PrismaModule } from './shared/prisma/prisma.module';
 import { ClientsModule } from './modules/clients/clients.module';
 import { UsersModule } from './modules/users/users.module';
-import { ContractModule } from './modules/clients/contracts/contracts.module';
 import { DepartmentsModule } from './modules/clients/departments/departments.module';
 import { TimesheetsModule } from './modules/timesheets/timesheets.module';
 import { MorganMiddleware } from './shared/middlewares/logging.middleware';
@@ -16,13 +15,13 @@ import { SituationsModule } from './modules/tickets/situations/situations.module
 import { FileUploadModule } from './shared/multer/storage.module';
 import { ReportsModule } from './modules/reports/reports.module';
 import { MailerModule } from './shared/providers/mail/mailer.module';
+import { ContractsModule } from './modules/contracts/contracts.module';
 
 @Module({
   imports: [
     PrismaModule,
     ClientsModule,
     UsersModule,
-    ContractModule,
     DepartmentsModule,
     TimesheetsModule,
     TicketsModule,
@@ -33,6 +32,7 @@ import { MailerModule } from './shared/providers/mail/mailer.module';
     FileUploadModule,
     ReportsModule,
     MailerModule,
+    ContractsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
