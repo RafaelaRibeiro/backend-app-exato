@@ -49,7 +49,7 @@ export const emailReply = (
               </blockquote>
 
               <div style="text-align: center">
-                <a href="http://portal.exatoconsultoria.com.br/tickets/${ticketId}" style="
+                <a href="http://portal.exatoinovacoes.com.br/tickets/${ticketId}" style="
                       background-color: #2271a1;
                       border: none;
                       color: white;

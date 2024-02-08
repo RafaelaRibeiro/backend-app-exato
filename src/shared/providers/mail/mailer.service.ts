@@ -9,7 +9,7 @@ export class MailerService {
   constructor() {
     this.transporter = nodemailer.createTransport({
       host: process.env.HOST,
-      port: Number(process.env.PORT),
+      port: Number(process.env.PORT_EMAIL),
       secure: true,
       auth: {
         user: process.env.EMAIL_USER,

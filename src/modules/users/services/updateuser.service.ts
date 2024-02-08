@@ -7,7 +7,7 @@ import {
 import { PrismaService } from 'src/shared/prisma/prisma.service';
 
 import * as bcrypt from 'bcrypt';
-import { UpdateUserDTO } from '../users.dto';
+import { ChangePasswordDTO, UpdateUserDTO } from '../users.dto';
 
 @Injectable()
 export class UpdateUsersService {
@@ -21,12 +21,7 @@ export class UpdateUsersService {
     return { ...user, password: undefined };
   }
 
-  async updatePassword(
-    id: number,
-    password: string,
-    newPassword: string,
-    confirmPassword: string,
-  ) {
+  async updatePassword(id: number, data: ChangePasswordDTO) {
     const user = await this.prisma.user.findUnique({ where: { id } });
 
     if (!user) {
@@ -34,7 +29,7 @@ export class UpdateUsersService {
     }
 
     const isPasswordCorrect = await this.comparePasswords(
-      password,
+      data.password,
       user.password,
     );
 
@@ -42,13 +37,13 @@ export class UpdateUsersService {
       throw new BadRequestException('Senha atual incorreta');
     }
 
-    if (newPassword !== confirmPassword) {
+    if (data.newPassword !== data.passwordConfirm) {
       throw new BadRequestException(
         'A nova senha e a confirmação de senha não coincidem.',
       );
     }
 
-    const passwordHash = await bcrypt.hash(newPassword, 10);
+    const passwordHash = await bcrypt.hash(data.newPassword, 10);
 
     return await this.prisma.user.update({
       where: { id: user.id },

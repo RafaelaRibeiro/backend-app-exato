@@ -67,3 +67,16 @@ export class CreateUserDTO {
 }
 
 export class UpdateUserDTO extends PartialType(CreateUserDTO) {}
+
+export class ChangePasswordDTO {
+  @IsString()
+  password: string;
+
+  @IsString()
+  @MinLength(3)
+  newPassword: string;
+
+  @IsString()
+  @MinLength(3)
+  passwordConfirm: string;
+}

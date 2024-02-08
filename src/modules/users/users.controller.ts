@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { CreateUserService } from './services/createUserService.service';
-import { CreateUserDTO, UpdateUserDTO } from './users.dto';
+import { ChangePasswordDTO, CreateUserDTO, UpdateUserDTO } from './users.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { FindUsersService } from './services/findUsers.service';
 import { AuthGuard } from '@nestjs/passport';
@@ -60,21 +60,7 @@ export class UsersController {
   }
 
   @Put(':id/change-password')
-  async updatePassword(
-    @Param('id', ParseIntPipe) id: number,
-    @Body()
-    passwordData: {
-      password: string;
-      newPassword: string;
-      confirmPassword: string;
-    },
-  ) {
-    const { password, newPassword, confirmPassword } = passwordData;
-    return this.updateUserService.updatePassword(
-      id,
-      password,
-      newPassword,
-      confirmPassword,
-    );
+  async updatePassword(@Request() req: any, @Body() data: ChangePasswordDTO) {
+    return this.updateUserService.updatePassword(req.user.id, data);
   }
 }
