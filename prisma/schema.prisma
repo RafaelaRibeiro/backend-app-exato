@@ -243,8 +243,8 @@ model Notification {
   type       String
   user       User     @relation(fields: [user_id], references: [id])
   user_id    Int
-  ticket     Ticket   @relation(fields: [ticket_id], references: [id])
-  ticket_id  Int
+  ticket     Ticket?  @relation(fields: [ticket_id], references: [id])
+  ticket_id  Int?
   read       Boolean  @default(false)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt

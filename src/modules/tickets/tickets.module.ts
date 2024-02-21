@@ -11,6 +11,7 @@ import { TicketUpdateService } from './services/ticketUpdate.service';
 import { TicketsAttachmentService } from './services/ticketAttachment.service';
 import { FilesController } from './files.controller';
 import { MailerService } from 'src/shared/providers/mail/mailer.service';
+import { NotificationsModule } from '../notifications/notifications.module';
 
 @Module({
   controllers: [TicketsController, FilesController],
@@ -24,7 +25,7 @@ import { MailerService } from 'src/shared/providers/mail/mailer.service';
     TicketsAttachmentService,
     MailerService,
   ],
-  imports: [PrismaModule],
+  imports: [PrismaModule, NotificationsModule],
   exports: [TicketQueryService],
 })
 export class TicketsModule {}

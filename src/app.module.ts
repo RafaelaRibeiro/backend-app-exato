@@ -16,6 +16,7 @@ import { FileUploadModule } from './shared/multer/storage.module';
 import { ReportsModule } from './modules/reports/reports.module';
 import { MailerModule } from './shared/providers/mail/mailer.module';
 import { ContractsModule } from './modules/contracts/contracts.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { ContractsModule } from './modules/contracts/contracts.module';
     ReportsModule,
     MailerModule,
     ContractsModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -8,7 +8,7 @@ export class UsersController {
   ) {}
 
   @Get(':user_id/clients')
-  async findClientsByUser(@Param('id', ParseIntPipe) userId: number) {
+  async findClientsByUser(@Param('user_id', ParseIntPipe) userId: number) {
     return this.findUsersByClientService.findClientsByUser(userId);
   }
 

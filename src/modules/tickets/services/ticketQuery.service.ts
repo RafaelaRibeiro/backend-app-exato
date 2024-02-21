@@ -8,7 +8,7 @@ export class TicketQueryService {
   private static ticketTypeMap = {
     A: ['A'],
     C: ['C'],
-    O: ['A', 'O', 'P'],
+    O: ['O'],
     P: ['P'],
     T: ['A', 'C', 'O', 'P'],
   };

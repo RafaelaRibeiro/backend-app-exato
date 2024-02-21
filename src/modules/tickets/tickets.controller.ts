@@ -59,8 +59,6 @@ export class TicketsController {
     ticketType: 'A' | 'C' | 'T' | 'O' | 'P',
     @Request() req: any,
   ) {
-    console.log(req.user);
-
     return this.ticketQueryService.listUserTickets(req.user.id, ticketType);
   }
 

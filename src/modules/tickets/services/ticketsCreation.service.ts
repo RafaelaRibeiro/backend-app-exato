@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/shared/prisma/prisma.service';
 import { CreateTicketDto } from '../tickets.dto';
+import { NotificationsService } from 'src/modules/notifications/notifications.service';
 
 @Injectable()
 export class TicketCreationService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly notificationService: NotificationsService,
+  ) {}
 
   async create(ticket: CreateTicketDto) {
     const createTicket = await this.prisma.ticket.create({
@@ -31,6 +35,18 @@ export class TicketCreationService {
         TicketContent: true,
       },
     });
+
+    const notificationData = {
+      title: 'Novo chamado criado',
+      message: `Um novo chamado foi criado: #${createTicket.id} - ${createTicket.subject} `,
+      type: 'client',
+      user_id: ticket.user_id,
+      ticket_id: createTicket.id,
+    };
+
+    console.log(notificationData);
+
+    await this.notificationService.createNotification(notificationData);
 
     return createTicket;
   }

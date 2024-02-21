@@ -13,6 +13,38 @@ export class FindUsersService {
     private readonly findClientsService: FindClientService,
   ) {}
 
+  async findMany() {
+    try {
+      const users = await this.prisma.userClients.findMany({
+        select: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+
+        orderBy: {
+          user: {
+            name: 'asc',
+          },
+        },
+        distinct: ['user_id'],
+      });
+
+      const newUsers = users.map((user) => {
+        return {
+          id: user.user.id,
+          name: user.user.name,
+        };
+      });
+      return newUsers;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async findOne(id: number) {
     const user = await this.prisma.user.findUnique({ where: { id } });
 

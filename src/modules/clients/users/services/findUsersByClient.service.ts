@@ -21,7 +21,14 @@ export class FindUsersByClientService {
     if (clients.length === 0)
       throw new NotFoundException('No clients found for the given user');
 
-    return clients;
+    const newClients = clients.map((client) => {
+      return {
+        client_id: client.client_id,
+        client_name: client.client.trade_name,
+      };
+    });
+
+    return newClients;
   }
 
   async findMany() {

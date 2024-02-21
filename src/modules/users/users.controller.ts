@@ -36,6 +36,12 @@ export class UsersController {
   async create(@Body() data: CreateUserDTO) {
     return this.createUserService.create(data);
   }
+
+  @Get()
+  async findMany() {
+    return this.findUserService.findMany();
+  }
+
   @Get('clients')
   async listTickets(@Request() req: AuthenticatedRequest) {
     const userId = Number(req.user.id);
